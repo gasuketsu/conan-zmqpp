@@ -10,7 +10,7 @@ class ZmqppConan(ConanFile):
     url = "https://github.com/gasuketsu/conan-zmqpp"
     settings = "os", "compiler", "build_type", "arch"
     generators = "cmake", "txt"
-    exports = "*"
+    exports = "CMakeLists.txt"
     options = {"shared": [True, False],
                "zmqpp_libzmq_cmake": [True, False],
                "zmqpp_build_examples": [True, False],
