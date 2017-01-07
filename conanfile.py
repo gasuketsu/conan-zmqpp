@@ -5,11 +5,12 @@ import os
 
 class ZmqppConan(ConanFile):
     name = "zmqpp"
+    description = "0mq 'highlevel' C++ bindings"
     version = "4.1.2"
     license = "MPLv2"
     url = "https://github.com/gasuketsu/conan-zmqpp"
     settings = "os", "compiler", "build_type", "arch"
-    generators = "cmake", "txt"
+    generators = "cmake", "txt", "env"
     exports = "CMakeLists.txt"
     options = {"shared": [True, False],
                "zmqpp_libzmq_cmake": [True, False],
