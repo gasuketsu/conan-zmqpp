@@ -25,14 +25,14 @@ zmqpp_build_client=False
 zmqpp_build_tests=False
 '''
 
+    def requirements(self):
+        self.requires("libzmq/4.1.5@memsharded/stable")
+
     def source(self):
        self.run("git clone https://github.com/zeromq/zmqpp.git")
        self.run("cd zmqpp && git checkout 4.1.2")
        shutil.move("zmqpp/CMakeLists.txt", "zmqpp/CMakeListsOriginal.cmake")
        shutil.copy("CMakeLists.txt", "zmqpp/CMakeLists.txt")
-
-    def configure(self):
-        self.requires.add("libzmq/4.1.5@memsharded/stable", private=False)
 
     def build(self):
         cmake = CMake(self.settings)
