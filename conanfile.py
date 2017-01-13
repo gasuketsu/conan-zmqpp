@@ -60,4 +60,4 @@ zmqpp_build_tests=False
         self.copy("*.a", dst="lib", keep_path=False)
 
     def package_info(self):
-        self.cpp_info.libs = ["zmqpp"]
+        self.cpp_info.libs = ["libzmqpp.so"] if self.options.shared else ["libzmqpp-static.a"]
