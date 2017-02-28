@@ -34,11 +34,11 @@ class ZmqppConan(ConanFile):
 
     def package(self):
         self.copy("*.hpp", dst="include/zmqpp", src="zmqpp/src/zmqpp")
-        self.copy("*.lib", dst="lib", src="zmqpp/cmake_build", keep_path=False)
-        self.copy("*.dll", dst="bin", src="zmqpp/cmake_build", keep_path=False)
-        self.copy("*.so", dst="lib", src="zmqpp/cmake_build", keep_path=False, symlinks=True)
-        self.copy("*.a", dst="lib", src="zmqpp/cmake_build", keep_path=False)
-        self.copy("*", dst="bin", src="zmqpp/cmake_build/bin", keep_path=False)
+        self.copy("*.lib", dst="lib", keep_path=False)
+        self.copy("*.dll", dst="bin", keep_path=False)
+        self.copy("*.so", dst="lib", keep_path=False, symlinks=True)
+        self.copy("*.a", dst="lib", keep_path=False)
+        self.copy("*", dst="bin", src="bin", keep_path=False)
 
     def package_info(self):
         # TODO: add impl for Windows
