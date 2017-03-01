@@ -13,10 +13,14 @@ class ZmqppConan(ConanFile):
     generators = "cmake", "txt", "env"
     exports = "CMakeLists.txt"
     options = {"shared": [True, False], "build_client": [True, False]}
-    default_options = "libzmq:shared=True", "shared=True", "build_client=True"
+    default_options = "shared=True", "build_client=True"
 
     def requirements(self):
         self.requires("libzmq/[>4.1.0]@gasuketsu/testing")
+
+    def configure(self):
+        if self.options.shared:
+            self.options["libzmq"].shared = "True"
 
     def source(self):
         self.run("git clone https://github.com/zeromq/zmqpp.git")
