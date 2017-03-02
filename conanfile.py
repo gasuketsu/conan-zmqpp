@@ -30,9 +30,9 @@ class ZmqppConan(ConanFile):
 
     def build(self):
         cmake = CMake(self.settings)
-        opts = {"ZMQPP_BUILD_STATIC":"ON" if not self.options.shared else "OFF",
-                "ZMQPP_BUILD_SHARED":"ON" if self.options.shared else "OFF",
-                "ZMQPP_BUILD_CLIENT":"ON"}
+        opts = {"ZMQPP_BUILD_STATIC": "ON" if not self.options.shared else "OFF",
+                "ZMQPP_BUILD_SHARED": "ON" if self.options.shared else "OFF",
+                "ZMQPP_BUILD_CLIENT": "ON"}
         cmake.configure(self, None, opts, source_dir="zmqpp")
         cmake.build(self)
 
