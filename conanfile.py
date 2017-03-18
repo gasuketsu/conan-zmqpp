@@ -6,25 +6,26 @@ import os
 class ZmqppConan(ConanFile):
     name = "zmqpp"
     description = "0mq 'highlevel' C++ bindings"
-    version = "4.1.2"
+    version = "develop"
     license = "MPLv2"
     url = "https://github.com/gasuketsu/conan-zmqpp"
     settings = "os", "compiler", "build_type", "arch"
-    generators = "cmake", "txt", "env"
+    generators = "cmake", "txt"
     exports = "CMakeLists.txt"
     options = {"shared": [True, False], "build_client": [True, False]}
     default_options = "shared=True", "build_client=True"
 
     def requirements(self):
-        self.requires("libzmq/[>4.1.0]@gasuketsu/testing")
+        self.requires("libzmq/4.1.5@gasuketsu/testing")
+        if self.options.build_client:
+            self.requires("Boost/1.60.0@gasuketsu/stable")
 
     def configure(self):
         if self.options.shared:
             self.options["libzmq"].shared = "True"
 
     def source(self):
-        self.run("git clone https://github.com/zeromq/zmqpp.git")
-        self.run("cd zmqpp && git checkout 4.1.2")
+        self.run("git clone --branch %s https://github.com/zeromq/zmqpp.git" % (self.version))
         shutil.move("zmqpp/CMakeLists.txt", "zmqpp/CMakeListsOriginal.cmake")
         shutil.copy("CMakeLists.txt", "zmqpp/CMakeLists.txt")
 
@@ -32,7 +33,7 @@ class ZmqppConan(ConanFile):
         cmake = CMake(self.settings)
         opts = {"ZMQPP_BUILD_STATIC": "ON" if not self.options.shared else "OFF",
                 "ZMQPP_BUILD_SHARED": "ON" if self.options.shared else "OFF",
-                "ZMQPP_BUILD_CLIENT": "ON"}
+                "ZMQPP_BUILD_CLIENT": "ON" if self.options.build_client else "OFF"}
         cmake.configure(self, None, opts, source_dir="zmqpp")
         cmake.build(self)
 
