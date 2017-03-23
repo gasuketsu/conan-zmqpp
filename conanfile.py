@@ -16,9 +16,9 @@ class ZmqppConan(ConanFile):
     default_options = "shared=True", "build_client=True"
 
     def requirements(self):
-        self.requires("libzmq/4.1.5@gasuketsu/testing")
+        self.requires("libzmq/4.1.5@memsharded/stable")
         if self.options.build_client:
-            self.requires("Boost/1.60.0@gasuketsu/stable")
+            self.requires("Boost/1.60.0@lasote/stable")
 
     def configure(self):
         if self.options.shared:
@@ -51,4 +51,3 @@ class ZmqppConan(ConanFile):
             self.env_info.path.append(os.path.join(self.package_folder, "bin"))
         if self.settings.os != "Windows":
             self.cpp_info.libs = ["zmqpp"] if self.options.shared else ["zmqpp-static"]
-            self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))
