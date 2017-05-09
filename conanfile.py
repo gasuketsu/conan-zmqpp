@@ -1,4 +1,4 @@
-from conans import ConanFile, CMake, tools
+from conans import ConanFile, CMake
 import shutil
 import os
 
@@ -13,7 +13,7 @@ class ZmqppConan(ConanFile):
     generators = "cmake", "txt"
     exports = "CMakeLists.txt"
     options = {"shared": [True, False], "build_client": [True, False]}
-    default_options = "shared=True", "build_client=True"
+    default_options = "shared=True", "build_client=False"
 
     def requirements(self):
         self.requires("libzmq/4.1.5@gasuketsu/testing")
@@ -30,12 +30,12 @@ class ZmqppConan(ConanFile):
         shutil.copy("CMakeLists.txt", "zmqpp/CMakeLists.txt")
 
     def build(self):
-        cmake = CMake(self.settings)
+        cmake = CMake(self)
         opts = {"ZMQPP_BUILD_STATIC": "ON" if not self.options.shared else "OFF",
                 "ZMQPP_BUILD_SHARED": "ON" if self.options.shared else "OFF",
                 "ZMQPP_BUILD_CLIENT": "ON" if self.options.build_client else "OFF"}
-        cmake.configure(self, None, opts, source_dir="zmqpp")
-        cmake.build(self)
+        cmake.configure(None, opts, source_dir="zmqpp")
+        cmake.build()
 
     def package(self):
         self.copy("*.hpp", dst="include/zmqpp", src="zmqpp/src/zmqpp")
