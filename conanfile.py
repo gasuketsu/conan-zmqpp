@@ -1,6 +1,5 @@
 from conans import ConanFile, CMake
 import shutil
-import os
 
 
 class ZmqppConan(ConanFile):
@@ -13,19 +12,20 @@ class ZmqppConan(ConanFile):
     generators = "cmake", "txt"
     exports = "CMakeLists.txt"
     options = {"shared": [True, False], "build_client": [True, False]}
-    default_options = "shared=True", "build_client=False"
+    default_options = "shared=False", "build_client=False"
 
     def requirements(self):
-        self.requires("libzmq/4.1.5@gasuketsu/testing")
+        self.requires("libzmq/[>4.1.0]@memsharded/stable")
         if self.options.build_client:
-            self.requires("Boost/1.60.0@lasote/stable")
+            self.requires("Boost/[>1.58.0]@lasote/stable")
 
     def configure(self):
         if self.options.shared:
             self.options["libzmq"].shared = "True"
 
     def source(self):
-        self.run("git clone --branch %s https://github.com/zeromq/zmqpp.git" % (self.version))
+        self.run("git clone https://github.com/zeromq/zmqpp.git")
+        self.run("cd zmqpp && git checkout %s" % self.version)
         shutil.move("zmqpp/CMakeLists.txt", "zmqpp/CMakeListsOriginal.cmake")
         shutil.copy("CMakeLists.txt", "zmqpp/CMakeLists.txt")
 
@@ -34,7 +34,7 @@ class ZmqppConan(ConanFile):
         opts = {"ZMQPP_BUILD_STATIC": "ON" if not self.options.shared else "OFF",
                 "ZMQPP_BUILD_SHARED": "ON" if self.options.shared else "OFF",
                 "ZMQPP_BUILD_CLIENT": "ON" if self.options.build_client else "OFF"}
-        cmake.configure(None, opts, source_dir="zmqpp")
+        cmake.configure(defs=opts, source_dir="zmqpp", build_dir="./")
         cmake.build()
 
     def package(self):
@@ -44,10 +44,7 @@ class ZmqppConan(ConanFile):
         self.copy("*.so", dst="lib", keep_path=False, symlinks=True)
         self.copy("*.a", dst="lib", keep_path=False)
         self.copy("*", dst="bin", src="bin", keep_path=False)
+        self.copy("license*", dst="licenses", src="zmqpp", ignore_case=True, keep_path=False)
 
     def package_info(self):
-        # TODO: add impl for Windows
-        if self.options.build_client:
-            self.env_info.path.append(os.path.join(self.package_folder, "bin"))
-        if self.settings.os != "Windows":
-            self.cpp_info.libs = ["zmqpp"] if self.options.shared else ["zmqpp-static"]
+        self.cpp_info.libs = ["zmqpp"] if self.options.shared else ["zmqpp-static"]
