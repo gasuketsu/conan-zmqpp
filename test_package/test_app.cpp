@@ -18,14 +18,14 @@ int main()
 
   zmqpp::message receivedMsg;
   rep.receive(receivedMsg);
-  assert(receivedMsg.get(0) == reqMsg.get(0));
+  assert(receivedMsg.get(0) == "hello");
 
   zmqpp::message repMsg;
   repMsg << "world";
   rep.send(repMsg);
 
   req.receive(receivedMsg);
-  assert(receivedMsg.get(0) == repMsg.get(0));
+  assert(receivedMsg.get(0) == "world");
 
   return 0;
 }
