@@ -11,8 +11,8 @@ class ZmqppConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     generators = "cmake", "txt"
     exports = "CMakeLists.txt"
-    options = {"shared": [True, False], "build_client": [True, False]}
-    default_options = "shared=False", "build_client=False"
+    options = {"build_client": [True, False]}
+    default_options = "build_client=False"
 
     def requirements(self):
         self.requires("libzmq/[>4.1.0]@memsharded/stable")
@@ -20,8 +20,7 @@ class ZmqppConan(ConanFile):
             self.requires("Boost/[>1.58.0]@lasote/stable")
 
     def configure(self):
-        if self.options.shared:
-            self.options["libzmq"].shared = "True"
+        self.options["libzmq"].shared = "True"
 
     def source(self):
         self.run("git clone https://github.com/zeromq/zmqpp.git")
@@ -31,8 +30,8 @@ class ZmqppConan(ConanFile):
 
     def build(self):
         cmake = CMake(self)
-        opts = {"ZMQPP_BUILD_STATIC": "ON" if not self.options.shared else "OFF",
-                "ZMQPP_BUILD_SHARED": "ON" if self.options.shared else "OFF",
+        opts = {"ZMQPP_BUILD_STATIC": "OFF",
+                "ZMQPP_BUILD_SHARED": "ON",
                 "ZMQPP_BUILD_CLIENT": "ON" if self.options.build_client else "OFF"}
         cmake.configure(defs=opts, source_dir="zmqpp", build_dir="./")
         cmake.build()
@@ -47,4 +46,4 @@ class ZmqppConan(ConanFile):
         self.copy("license*", dst="licenses", src="zmqpp", ignore_case=True, keep_path=False)
 
     def package_info(self):
-        self.cpp_info.libs = ["zmqpp"] if self.options.shared else ["zmqpp-static"]
+        self.cpp_info.libs = ["zmqpp"]

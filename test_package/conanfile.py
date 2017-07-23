@@ -10,12 +10,6 @@ class ZmqppTestConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     requires = "zmqpp/develop@%s/%s" % (username, channel)
     generators = "cmake"
-    options = {"with_shared": [True, False]}
-    default_options = "with_shared=False"
-
-    def configure(self):
-        if self.options.with_shared:
-            self.options["zmqpp"].shared = "True"
 
     def build(self):
         cmake = CMake(self)
