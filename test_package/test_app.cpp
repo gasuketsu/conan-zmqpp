@@ -16,16 +16,17 @@ int main()
   reqMsg << "hello";
   req.send(reqMsg);
 
-  zmqpp::message receivedMsg;
-  rep.receive(receivedMsg);
-  assert(receivedMsg.get(0) == reqMsg.get(0));
+  zmqpp::message receivedReqMsg;
+  rep.receive(receivedReqMsg);
+  assert(receivedReqMsg.get(0) == reqMsg.get(0));
 
   zmqpp::message repMsg;
   repMsg << "world";
   rep.send(repMsg);
 
-  req.receive(receivedMsg);
-  assert(receivedMsg.get(0) == repMsg.get(0));
+  zmqpp::message receivedRepMsg;
+  req.receive(receivedRepMsg);
+  assert(receivedRepMsg.get(0) == repMsg.get(0));
 
   return 0;
 }
