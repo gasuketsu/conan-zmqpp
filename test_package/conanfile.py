@@ -8,7 +8,7 @@ username = os.getenv("CONAN_USERNAME", "gasuketsu")
 
 class ZmqppTestConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
-    requires = "zmqpp/4.1.2@%s/%s" % (username, channel)
+    requires = "zmqpp/develop@%s/%s" % (username, channel)
     generators = "cmake"
     options = {"with_shared": [True, False]}
     default_options = "with_shared=False"

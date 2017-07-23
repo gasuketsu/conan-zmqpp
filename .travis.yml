@@ -1,7 +1,7 @@
 
 env:
    global:
-     - CONAN_REFERENCE: "zmqpp/4.1.2"
+     - CONAN_REFERENCE: "zmqpp/develop"
      - CONAN_USERNAME: "gasuketsu"
      - CONAN_LOGIN_USERNAME: "gasuketsu"
      - CONAN_CHANNEL: "stable"
