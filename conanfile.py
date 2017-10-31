@@ -15,7 +15,7 @@ class ZmqppConan(ConanFile):
     default_options = "build_client=False"
 
     def requirements(self):
-        self.requires("libzmq/[>4.1.0]@memsharded/stable")
+        self.requires("libzmq/[>4.1.0]@memsharded/testing")
         if self.options.build_client:
             self.requires("Boost/[>1.58.0]@lasote/stable")
 
